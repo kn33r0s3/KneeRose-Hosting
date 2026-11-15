@@ -9,11 +9,18 @@ const modules = require('./my-modules/modules');
 //fname last!
 /// mongoose
 const mongoose = require('mongoose');
-const myPass = encodeURIComponent("Nirazdon45$");
-const db = mongoose.createConnection(`mongodb+srv://kneerose:${myPass}@senecaweb.bi5o8b1.mongodb.net/web322_week8?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const blogPage = mongoose.createConnection(`mongodb+srv://kneerose:${myPass}@senecaweb.bi5o8b1.mongodb.net/blogPage?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
-const articlePage = mongoose.createConnection(`mongodb+srv://kneerose:${myPass}@senecaweb.bi5o8b1.mongodb.net/articlePage?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
+function requireMongoUri(name) {
+    const uri = process.env[name];
+    if (!uri) {
+        throw new Error(`Missing required environment variable: ${name}`);
+    }
+    return uri;
+}
+const db = mongoose.createConnection(requireMongoUri("MONGODB_USERS_URI"), { useNewUrlParser: true, useUnifiedTopology: true });
+
+const blogPage = mongoose.createConnection(requireMongoUri("MONGODB_BLOG_URI"), { useNewUrlParser: true, useUnifiedTopology: true });
+const articlePage = mongoose.createConnection(requireMongoUri("MONGODB_ARTICLES_URI"), { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 //BLOG COLLECTIONS DEFINE
